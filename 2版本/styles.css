@@ -1,0 +1,388 @@
+/* myt */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+    min-height: 100vh;
+    padding: 1.25rem;
+    overflow-x: hidden;
+    background: #171923;
+    color: #e7edf3;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+.topbar, main {
+    width: 100%;
+    max-width: 67.5rem;
+    margin: 0 auto;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.topbar > div:first-child { min-width: 0; }
+
+h1 {
+    color: #4fd1c5;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    letter-spacing: 0;
+}
+
+.subtitle {
+    margin-top: 0.25rem;
+    color: #96a3b3;
+    font-size: 0.8125rem;
+}
+
+.top-status {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    min-width: 16rem;
+    color: #aab7c4;
+    font-size: 0.75rem;
+}
+
+.top-status span, .device-summary span {
+    min-width: 0;
+    padding: 0.375rem 0.5625rem;
+    overflow-wrap: anywhere;
+    border: 1px solid #263449;
+    border-radius: 0.375rem;
+    background: #1f2937;
+}
+
+.state-ok { color: #6ee7b7; }
+.state-warn { color: #fbbf24; }
+.state-bad { color: #fb7185; }
+
+.panel {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.875rem;
+    border: 1px solid #27364a;
+    border-radius: 0.5rem;
+    background: #202938;
+}
+
+.section-title {
+    margin-bottom: 0.625rem;
+    color: #d7e1ec;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.connection-mode {
+    display: inline-flex;
+    gap: 0.25rem;
+    max-width: 100%;
+    padding: 0.25rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #2f4057;
+    border-radius: 0.5rem;
+    background: #141b27;
+}
+
+.mode-button {
+    min-width: 6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: #aab7c4;
+}
+
+.mode-button.active {
+    background: #2dd4bf;
+    color: #102027;
+}
+
+.mode-panel { display: block; }
+
+.config-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    align-items: center;
+}
+
+.config-row.compact { gap: 0.5rem; }
+
+.config-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-width: 0;
+}
+
+.config-item.grow { flex: 1 1 17.5rem; }
+.config-item label {
+    flex: 0 0 auto;
+    color: #aab7c4;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+}
+
+.config-item input, .config-item select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.125rem;
+    padding: 0.375rem 0.625rem;
+    border: 1px solid #39506b;
+    border-radius: 0.375rem;
+    background: #111827;
+    color: #e7edf3;
+    font-size: 0.8125rem;
+}
+
+.config-item input[type="number"] { width: 5.625rem; }
+.config-item input:focus, .config-item select:focus { outline: none; border-color: #4fd1c5; }
+
+.inline-hint {
+    min-width: 0;
+    color: #8ea0b4;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+}
+
+.device-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+    color: #aab7c4;
+    font-size: 0.75rem;
+}
+
+button {
+    min-height: 2.375rem;
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.5625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-connect { background: #38bdf8; color: #08111f; }
+.btn-connect:hover:not(:disabled) { background: #0ea5e9; }
+.btn-connect.connected { background: #fb7185; color: #fff; }
+.btn-start { background: #2dd4bf; color: #08111f; }
+.btn-start:hover:not(:disabled) { background: #14b8a6; }
+.btn-stop { background: #fb7185; color: #fff; }
+.btn-stop:hover:not(:disabled) { background: #e11d48; }
+.btn-clear { background: #cbd5e1; color: #111827; }
+.btn-clear:hover:not(:disabled) { background: #94a3b8; }
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.625rem;
+    margin-bottom: 0.75rem;
+}
+
+.metric-card {
+    min-width: 0;
+    min-height: 5.125rem;
+    padding: 0.75rem;
+    border: 1px solid #27364a;
+    border-radius: 0.5rem;
+    background: #202938;
+}
+
+.metric-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #9badbf;
+    font-size: 0.75rem;
+}
+
+.metric-value {
+    display: block;
+    color: #f8fafc;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.alarm-banner {
+    width: 100%;
+    max-width: 67.5rem;
+    margin: 0 auto 0.75rem;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid #f59e0b;
+    border-radius: 0.5rem;
+    background: #3b2b13;
+    color: #fde68a;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.chart-panel { padding-bottom: 0.625rem; }
+
+.chart-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.5rem;
+}
+
+.chart-toolbar .section-title { margin-bottom: 0; }
+
+.chart-container {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #27364a;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: clamp(12.5rem, 45vw, 16.25rem);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
+}
+
+.status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.125rem;
+    color: #aab7c4;
+    font-size: 0.8125rem;
+}
+
+.status-bar .val { color: #4fd1c5; font-weight: 700; }
+.shortcut-hint { margin-top: 0.5rem; color: #77869a; font-size: 0.75rem; }
+
+.event-panel { min-height: 7.5rem; }
+
+.event-list {
+    display: grid;
+    gap: 0.375rem;
+    max-height: 11.25rem;
+    overflow-y: auto;
+}
+
+.event-row {
+    display: grid;
+    grid-template-columns: 8.25rem 5.625rem 1fr 5.625rem;
+    gap: 0.5rem;
+    align-items: center;
+    min-width: 0;
+    padding: 0.5rem 0.625rem;
+    border: 1px solid #2d3f57;
+    border-radius: 0.375rem;
+    background: #172033;
+    color: #dbe7f3;
+    font-size: 0.75rem;
+}
+
+.event-row > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.event-row.warning { border-color: #b7791f; }
+.event-row.danger { border-color: #e11d48; }
+.empty-row { color: #7f8ea3; font-size: 0.8125rem; }
+
+.log {
+    width: 100%;
+    max-width: 67.5rem;
+    max-height: 8.75rem;
+    margin: 0 auto;
+    padding: 0.625rem;
+    overflow: auto;
+    border: 1px solid #27364a;
+    border-radius: 0.5rem;
+    background: #0f172a;
+    color: #8ee7d0;
+    font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+}
+
+.log-entry { margin-bottom: 0.1875rem; }
+.log-entry.error { color: #fb7185; }
+.log-entry.warn { color: #fbbf24; }
+
+.is-hidden { display: none !important; }
+
+@media (max-width: 900px) {
+    .topbar { flex-direction: column; }
+    .top-status {
+        justify-content: flex-start;
+        min-width: 0;
+    }
+    .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .chart-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 720px) {
+    html { font-size: 15px; }
+    body { padding: 0.75rem; }
+    .panel { padding: 0.75rem; }
+    .connection-mode {
+        display: flex;
+        width: 100%;
+    }
+    .mode-button {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    .config-row, .actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .config-row.compact {
+        flex-direction: row;
+        align-items: center;
+    }
+    .config-item {
+        width: 100%;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    .config-row.compact .config-item {
+        flex: 1 1 10rem;
+    }
+    .config-item input[type="number"] { width: 100%; }
+    button { width: 100%; }
+    .device-summary, .top-status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .event-row { grid-template-columns: 1fr 1fr; }
+    .shortcut-hint { display: none; }
+}
+
+@media (max-width: 420px) {
+    html { font-size: 14px; }
+    h1 { font-size: 1.35rem; }
+    .top-status, .device-summary, .metrics-grid, .event-row { grid-template-columns: 1fr; }
+    .config-row.compact { flex-direction: column; }
+    .config-row.compact .config-item { flex: 0 1 auto; }
+    .metric-card { min-height: 4.75rem; }
+    .metric-value { font-size: 1.25rem; }
+}
