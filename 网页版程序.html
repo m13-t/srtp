@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>婴幼儿踢被与睡姿监测上位机</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <h1>婴幼儿踢被与睡姿监测上位机</h1>
+        <p class="subtitle">电脑端 BLE 与串口调试界面</p>
+    </div>
+    <div class="top-status" aria-label="运行状态">
+        <span>后端：<strong id="backendState" class="state-warn">检测中</strong></span>
+        <span>方式：<strong id="modeLabel">BLE 蓝牙</strong></span>
+        <span>更新：<strong id="refreshTime">--</strong></span>
+    </div>
+</header>
+
+<main id="app">
+    <section class="panel">
+        <div class="section-title">设备连接</div>
+        <div class="connection-mode" role="tablist" aria-label="连接方式">
+            <button id="modeBle" class="mode-button active" type="button" data-mode="ble">BLE 蓝牙</button>
+            <button id="modeSerial" class="mode-button" type="button" data-mode="serial">串口调试</button>
+        </div>
+
+        <div id="blePanel" class="mode-panel">
+            <div class="config-row">
+                <button id="btnScanBle" class="btn-connect" type="button">扫描蓝牙设备</button>
+                <div class="config-item grow">
+                    <label for="bleDeviceSelect">设备：</label>
+                    <select id="bleDeviceSelect">
+                        <option value="">请先扫描设备</option>
+                    </select>
+                </div>
+                <button id="btnBleConnect" class="btn-start" type="button" disabled>连接设备</button>
+                <button id="btnBleDisconnect" class="btn-stop" type="button" disabled>断开连接</button>
+            </div>
+            <div class="device-summary">
+                <span>名称：<strong id="bleDeviceName">--</strong></span>
+                <span>ID：<strong id="bleDeviceId">--</strong></span>
+                <span>RSSI：<strong id="bleRssi">--</strong></span>
+            </div>
+        </div>
+
+        <div id="serialPanel" class="mode-panel is-hidden">
+            <div class="config-row">
+                <div class="config-item">
+                    <label for="baud">Baud Rate:</label>
+                    <select id="baud">
+                        <option value="4800">4800</option>
+                        <option value="9600" selected>9600</option>
+                        <option value="19200">19200</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="115200">115200</option>
+                        <option value="230400">230400</option>
+                        <option value="460800">460800</option>
+                        <option value="921600">921600</option>
+                    </select>
+                </div>
+                <button id="btnSerialConnect" class="btn-connect" type="button">连接串口</button>
+                <span id="serialSupport" class="inline-hint">串口调试用于 PCB 阶段 JSON 行数据接入。</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics-grid" aria-label="实时监测总览">
+        <div class="metric-card">
+            <span class="metric-label">温度</span>
+            <strong id="metricTemp" class="metric-value">-- °C</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">湿度</span>
+            <strong id="metricHumidity" class="metric-value">-- %RH</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">睡姿</span>
+            <strong id="metricPosture" class="metric-value">--</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">电量</span>
+            <strong id="metricBattery" class="metric-value">-- %</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">设备状态</span>
+            <strong id="metricStatus" class="metric-value">未连接</strong>
+        </div>
+    </section>
+
+    <section id="alarmBanner" class="alarm-banner is-hidden" role="alert"></section>
+
+    <section class="panel chart-panel">
+        <div class="chart-toolbar">
+            <div class="section-title">趋势曲线</div>
+            <div class="config-row compact">
+                <div class="config-item">
+                    <label for="chartMetric">曲线：</label>
+                    <select id="chartMetric">
+                        <option value="temperature_c">温度</option>
+                        <option value="humidity_pct">湿度</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label for="maxPoints">最大点数：</label>
+                    <input type="number" id="maxPoints" value="600" min="50" step="50">
+                </div>
+            </div>
+        </div>
+        <div class="chart-container"><canvas id="chart"></canvas></div>
+    </section>
+
+    <section class="panel">
+        <div class="actions">
+            <button id="btnStart" class="btn-start" type="button" disabled>开始监测</button>
+            <button id="btnStop" class="btn-stop" type="button" disabled>停止并导出</button>
+            <button id="btnClear" class="btn-clear" type="button">清空曲线</button>
+        </div>
+        <div class="status-bar">
+            <span>Session：<span id="statSession" class="val">未开始</span></span>
+            <span>样本：<span id="statSamples" class="val">0</span></span>
+            <span>来源：<span id="statSource" class="val">--</span></span>
+        </div>
+        <div class="shortcut-hint">快捷键：S=开始监测 | E=停止并导出 | C=清空曲线</div>
+    </section>
+
+    <section class="panel event-panel">
+        <div class="section-title">事件列表</div>
+        <div id="eventList" class="event-list">
+            <div class="empty-row">暂无事件</div>
+        </div>
+    </section>
+
+    <section class="log" id="logBox" aria-label="运行日志"></section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
