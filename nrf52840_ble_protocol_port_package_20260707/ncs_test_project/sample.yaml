@@ -1,0 +1,6 @@
+sample:
+  name: Baby Badge BLE NUS protocol test
+tests:
+  sample.bluetooth.baby_badge_nus_test:
+    platform_allow: nrf52840dk_nrf52840
+    tags: bluetooth
